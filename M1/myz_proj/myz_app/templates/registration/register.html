@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+</head>
+<body>
+    <h2>Регистрация</h2>
+    
+    {% for key, errors in form.errors.items %}
+        <p style="color: red;">{{ errors }}</p>
+    {% endfor %}
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            {{ form.username.label }}<br>
+            {{ form.username }}
+            {% if form.username.help_text %}
+                <small>{{ form.username.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.full_name.label }}<br>
+            {{ form.full_name }}
+        </div>
+        
+        <div>
+            {{ form.birth_date.label }}<br>
+            {{ form.birth_date }}
+        </div>
+        
+        <div>
+            {{ form.phone.label }}<br>
+            {{ form.phone }}
+        </div>
+        
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email }}
+        </div>
+        
+        <div>
+            {{ form.password1.label }}<br>
+            {{ form.password1 }}
+            {% if form.password1.help_text %}
+                <small>{{ form.password1.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.password2.label }}<br>
+            {{ form.password2 }}
+            {% if form.password2.help_text %}
+                <small>{{ form.password2.help_text }}</small>
+            {% endif %}
+        </div>
+        
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    
+    <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+</body>
+</html>

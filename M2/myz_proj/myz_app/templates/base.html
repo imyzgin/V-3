@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Пассажирам.РФ{% endblock %}</title>
+    {% load static %}
+    <style>
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "fonts/PTSans-Regular.ttf" %}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "fonts/PTSans-Italic.ttf" %}') format('truetype');
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "fonts/PTSans-Bold.ttf" %}') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "fonts/PTSans-BoldItalic.ttf" %}') format('truetype');
+            font-weight: 700;
+            font-style: italic;
+        }
+        
+        body {
+            font-family: 'PT Sans', sans-serif;
+            font-size: 16px;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    {% include 'global/header.html' %}
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'global/footer.html' %}
+</body>
+</html>

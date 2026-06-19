@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+<h1>Мои заявки</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% if requests %}
+    {% for req in requests %}
+        <div>
+            <p><strong>Вид транспорта:</strong> {{ req.get_transport_type_display }}</p>
+            <p><strong>Дата начала:</strong> {{ req.start_date }}</p>
+            <p><strong>Способ оплаты:</strong> 
+                {% if req.payment_method == 'cash' %}Наличными{% else %}Перевод{% endif %}
+            </p>
+            <p><strong>Статус:</strong> 
+                {% if req.status == 'new' %}Новая
+                {% elif req.status == 'in_progress' %}Идёт обучение
+                {% else %}Обучение завершено{% endif %}
+            </p>
+            <p><strong>Создана:</strong> {{ req.created_at|date:"d.m.Y H:i" }}</p>
+            
+            {% if req.status == 'completed' %}
+                {% if not req.review %}
+                    <a href="{% url 'leave_review' req.id %}">Оставить отзыв</a>
+                {% else %}
+                    <span>Отзыв оставлен</span>
+                {% endif %}
+            {% endif %}
+        </div>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>У вас пока нет заявок</p>
+    <a href="{% url 'create_request' %}">Записаться на обучение</a>
+{% endif %}
+{% endblock %}

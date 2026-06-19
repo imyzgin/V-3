@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Пассажирам.РФ{% endblock %}</title>
+</head>
+<body>
+    {% include 'global/header.html' %}
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include 'global/footer.html' %}
+</body>
+</html>

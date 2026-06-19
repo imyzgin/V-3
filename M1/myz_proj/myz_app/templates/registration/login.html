@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+</head>
+<body>
+    <h2>Вход в систему</h2>
+    
+    {% for key, errors in form.errors.items %}
+        <p style="color: red;">{{ errors }}</p>
+    {% endfor %}
+    
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.username.label }}<br>
+            {{ form.username }}
+        </div>
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password }}
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit">Войти</button>
+    </form>
+    
+    <p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+</body>
+</html>

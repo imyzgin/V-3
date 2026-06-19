@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Админ панель{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #0d47a1;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+    }
+    
+    th, td {
+        border: 1px solid #dee2e6;
+        padding: 10px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f8f9fa;
+        font-weight: 700;
+    }
+    
+    select {
+        padding: 5px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 14px;
+    }
+    
+    .btn:hover {
+        background-color: #0d47a1;
+    }
+    
+    .status-new {
+        color: #ff6600;
+        font-weight: 700;
+    }
+    
+    .status-in_progress {
+        color: #007bff;
+        font-weight: 700;
+    }
+    
+    .status-completed {
+        color: #28a745;
+        font-weight: 700;
+    }
+    
+    .pagination {
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    .pagination a, .pagination span {
+        display: inline-block;
+        padding: 8px 12px;
+        margin: 0 3px;
+        border: 1px solid #dee2e6;
+        background-color: #ffffff;
+        text-decoration: none;
+        color: #007bff;
+    }
+    
+    .pagination a:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .pagination .current {
+        background-color: #007bff;
+        color: #ffffff;
+        border-color: #007bff;
+    }
+    
+    .pagination .disabled {
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+    
+    .pagination .step-links {
+        display: inline-block;
+    }
+</style>
+
+<div class="container">
+    <h1>Админ панель</h1>
+    
+    <h2>Управление заявками</h2>
+    
+    {% if requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Вид транспорта</th>
+                    <th>Дата начала</th>
+                    <th>Оплата</th>
+                    <th>Статус</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                    <tr>
+                        <td>{{ req.id }}</td>
+                        <td>{{ req.user.username }}</td>
+                        <td>{{ req.get_transport_type_display }}</td>
+                        <td>{{ req.start_date }}</td>
+                        <td>{% if req.payment_method == 'cash' %}Наличными{% else %}Перевод{% endif %}</td>
+                        <td class="status-{{ req.status }}">
+                            {% if req.status == 'new' %}Новая
+                            {% elif req.status == 'in_progress' %}Идёт обучение
+                            {% else %}Завершено{% endif %}
+                        </td>
+                        <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="request_id" value="{{ req.id }}">
+                                <select name="status">
+                                    <option value="new" {% if req.status == 'new' %}selected{% endif %}>Новая</option>
+                                    <option value="in_progress" {% if req.status == 'in_progress' %}selected{% endif %}>Идёт обучение</option>
+                                    <option value="completed" {% if req.status == 'completed' %}selected{% endif %}>Завершено</option>
+                                </select>
+                                <button type="submit" class="btn">Изменить</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Пагинация -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if requests.has_previous %}
+                    <a href="?page=1">&laquo; Первая</a>
+                    <a href="?page={{ requests.previous_page_number }}">Назад</a>
+                {% else %}
+                    <span class="disabled">&laquo; Первая</span>
+                    <span class="disabled">Назад</span>
+                {% endif %}
+                
+                <span class="current">
+                    Страница {{ requests.number }} из {{ requests.paginator.num_pages }}
+                </span>
+                
+                {% if requests.has_next %}
+                    <a href="?page={{ requests.next_page_number }}">Вперёд</a>
+                    <a href="?page={{ requests.paginator.num_pages }}">Последняя &raquo;</a>
+                {% else %}
+                    <span class="disabled">Вперёд</span>
+                    <span class="disabled">Последняя &raquo;</span>
+                {% endif %}
+            </span>
+        </div>
+        
+        <p style="color: #6c757d; text-align: center; font-size: 14px;">
+            Всего заявок: {{ requests.paginator.count }}
+        </p>
+    {% else %}
+        <p>Нет заявок</p>
+    {% endif %}
+</div>
+{% endblock %}

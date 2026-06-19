@@ -1,0 +1,59 @@
+{% load static %}
+
+<footer>
+    <div class="footer-content">
+        <div class="social-icon">
+            <a href="#" target="_blank">
+                <img src="{% static 'media/soc1.png' %}" alt="Социальные сети" height="60">
+            </a>
+        </div>
+        <div class="footer-text">
+            Пассажирам.РФ &copy; 2026
+        </div>
+    </div>
+</footer>
+
+<style>
+    footer {
+        background-color: #ffffff;
+        padding: 15px 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #6c757d;
+        border-top: 2px solid #007bff;
+        margin-top: 30px;
+    }
+    
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .social-icon {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .social-icon a {
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+    
+    .social-icon a:hover {
+        transform: scale(1.1);
+    }
+    
+    .social-icon img {
+        display: block;
+        height: 60px;
+        width: auto;
+    }
+    
+    .footer-text {
+        font-size: 14px;
+        color: #6c757d;
+    }
+</style>

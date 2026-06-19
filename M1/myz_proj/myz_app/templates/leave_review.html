@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Оставить отзыв{% endblock %}
+
+{% block content %}
+<h1>Оставить отзыв</h1>
+
+<p><strong>Вид транспорта:</strong> {{ request_item.get_transport_type_display }}</p>
+<p><strong>Дата начала:</strong> {{ request_item.start_date }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div>
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+                {{ field.errors }}
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <button type="submit">Отправить отзыв</button>
+</form>
+{% endblock %}

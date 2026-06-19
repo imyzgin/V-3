@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Админ панель{% endblock %}
+
+{% block content %}
+<h1>Админ панель - Управление заявками</h1>
+
+{% if requests %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Пользователь</th>
+                <th>Вид транспорта</th>
+                <th>Дата начала</th>
+                <th>Оплата</th>
+                <th>Статус</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for req in requests %}
+                <tr>
+                    <td>{{ req.id }}</td>
+                    <td>{{ req.user.username }}</td>
+                    <td>{{ req.get_transport_type_display }}</td>
+                    <td>{{ req.start_date }}</td>
+                    <td>{% if req.payment_method == 'cash' %}Наличными{% else %}Перевод{% endif %}</td>
+                    <td>
+                        {% if req.status == 'new' %}Новая
+                        {% elif req.status == 'in_progress' %}Идёт обучение
+                        {% else %}Завершено{% endif %}
+                    </td>
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="request_id" value="{{ req.id }}">
+                            <select name="status">
+                                <option value="new" {% if req.status == 'new' %}selected{% endif %}>Новая</option>
+                                <option value="in_progress" {% if req.status == 'in_progress' %}selected{% endif %}>Идёт обучение</option>
+                                <option value="completed" {% if req.status == 'completed' %}selected{% endif %}>Завершено</option>
+                            </select>
+                            <button type="submit">Изменить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Нет заявок</p>
+{% endif %}
+{% endblock %}

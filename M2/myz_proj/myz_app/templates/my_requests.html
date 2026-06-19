@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #0d47a1;
+    }
+    
+    .request-item {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 4px;
+    }
+    
+    .request-item p {
+        margin: 5px 0;
+    }
+    
+    .status-new {
+        color: #ff6600;
+        font-weight: 700;
+    }
+    
+    .status-in_progress {
+        color: #007bff;
+        font-weight: 700;
+    }
+    
+    .status-completed {
+        color: #28a745;
+        font-weight: 700;
+    }
+    
+    .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'PT Sans', sans-serif;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    
+    .btn:hover {
+        background-color: #0d47a1;
+    }
+    
+    .review-done {
+        color: #28a745;
+        font-weight: 700;
+    }
+</style>
+
+<div class="container">
+    <h1>Мои заявки</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: #28a745;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    
+    {% if requests %}
+        {% for req in requests %}
+            <div class="request-item">
+                <p><strong>Вид транспорта:</strong> {{ req.get_transport_type_display }}</p>
+                <p><strong>Дата начала:</strong> {{ req.start_date }}</p>
+                <p><strong>Способ оплаты:</strong> 
+                    {% if req.payment_method == 'cash' %}Наличными{% else %}Перевод{% endif %}
+                </p>
+                <p><strong>Статус:</strong> 
+                    <span class="status-{{ req.status }}">
+                        {% if req.status == 'new' %}Новая
+                        {% elif req.status == 'in_progress' %}Идёт обучение
+                        {% else %}Обучение завершено{% endif %}
+                    </span>
+                </p>
+                <p><strong>Создана:</strong> {{ req.created_at|date:"d.m.Y H:i" }}</p>
+                
+                {% if req.status == 'completed' %}
+                    {% if not req.review %}
+                        <a href="{% url 'leave_review' req.id %}" class="btn">Оставить отзыв</a>
+                    {% else %}
+                        <span class="review-done">✓ Отзыв оставлен</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>У вас пока нет заявок</p>
+        <a href="{% url 'create_request' %}" class="btn">Записаться на обучение</a>
+    {% endif %}
+</div>
+{% endblock %}

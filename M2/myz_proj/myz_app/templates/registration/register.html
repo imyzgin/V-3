@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <style>
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "passenger_app/fonts/PTSans-Regular.ttf" %}') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'PT Sans';
+            src: url('{% static "passenger_app/fonts/PTSans-Bold.ttf" %}') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PT Sans', sans-serif;
+            font-size: 16px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            display: flex;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .auth-image {
+            flex: 0 0 35%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+        
+        .auth-image img {
+            max-width: 100%;
+            height: auto;
+            max-height: 350px;
+        }
+        
+        .auth-form {
+            flex: 1;
+            padding: 35px;
+        }
+        
+        .auth-form h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0d47a1;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            color: #0d47a1;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 15px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .form-group .help-text {
+            font-size: 12px;
+            color: #6c757d;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            transition: background-color 0.3s;
+            margin-top: 5px;
+        }
+        
+        .btn:hover {
+            background-color: #0d47a1;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .auth-footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+            
+            .auth-image {
+                flex: 0 0 auto;
+                padding: 20px;
+            }
+            
+            .auth-image img {
+                max-height: 150px;
+            }
+            
+            .auth-form {
+                padding: 25px;
+            }
+            
+            .auth-form h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-image">
+            <img src="{% static 'media/login.png' %}" alt="Регистрация">
+        </div>
+        <div class="auth-form">
+            <h2>Регистрация</h2>
+            
+            {% for key, errors in form.errors.items %}
+                <div class="error-message">{{ errors }}</div>
+            {% endfor %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    {{ form.username.label }}<br>
+                    {{ form.username }}
+                    {% if form.username.help_text %}
+                        <span class="help-text">{{ form.username.help_text }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.full_name.label }}<br>
+                    {{ form.full_name }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.birth_date.label }}<br>
+                    {{ form.birth_date }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.phone.label }}<br>
+                    {{ form.phone }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.email.label }}<br>
+                    {{ form.email }}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.password1.label }}<br>
+                    {{ form.password1 }}
+                    {% if form.password1.help_text %}
+                        <span class="help-text">{{ form.password1.help_text }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.password2.label }}<br>
+                    {{ form.password2 }}
+                    {% if form.password2.help_text %}
+                        <span class="help-text">{{ form.password2.help_text }}</span>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn">Зарегистрироваться</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

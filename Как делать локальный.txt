@@ -1,0 +1,11 @@
+cd путь_к_папке_с_работой
+git init
+git config user.name "Любое_имя"
+git config user.email "Любая_почта"
+(Абсолютно любая хоть имя: "Test" почта: "test@local"
+git add .
+git commit -m "Создание проекта"
+
+Затем для ещё одного комита:
+git add .
+git commit -m "Создание первого модуля"
